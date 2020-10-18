@@ -22,6 +22,11 @@ const AdminGamesScreen = ({ navigation }) => {
   const ownedGames = useSelector((state) => state.games.ownedGames);
   const dispatch = useDispatch();
 
+  const openGameHandler = async (id) => { 
+    await dispatch(gamesActions.setActiveGame(id));
+    navigation.navigate('GameAdmin');
+  };
+
   const loadGames = useCallback(async () => {
     setError(null);
     setIsRefresing(true);
@@ -31,7 +36,7 @@ const AdminGamesScreen = ({ navigation }) => {
       setError(err.message);
     }
     setIsRefresing(false);
-  }, [dispatch, setIsLoading, setError]);
+  }, [dispatch, setIsRefresing, setError]);
 
   useEffect(() => {
     const willFocusSub = navigation.addListener("willFocus", loadGames);
@@ -42,9 +47,11 @@ const AdminGamesScreen = ({ navigation }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    loadGames();
-    setIsLoading(false);
-  }, [dispatch, loadGames]);
+    gamesActions.setActiveGame(null);
+    loadGames().then(() => {
+      setIsLoading(false);
+    });;
+  }, [dispatch, loadGames, setIsLoading]);
 
   if (error) {
     return (
@@ -71,18 +78,21 @@ const AdminGamesScreen = ({ navigation }) => {
   if (!isLoading && ownedGames.length === 0) {
     return (
       <View style={styles.centered}>
-        <Text>No products found!</Text>
+        <Text>Nie znaleziono żadnych gier!</Text>
       </View>
     );
   }
 
   return (
     <FlatList
+      style={styles.gamesList}
       onRefresh={loadGames}
       refreshing={isRefresing}
       data={ownedGames}
       renderItem={(itemData) => (
-        <GameItem name={itemData.item.name} onSelect={() => {}} />
+        <GameItem name={itemData.item.name} onSelect={() => {
+          openGameHandler(itemData.item.id)
+        }} />
       )}
     />
   );
@@ -122,6 +132,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  gamesList: {
+    //marginVertical: 10,
+  }
 });
 
 export default AdminGamesScreen;

@@ -92,11 +92,8 @@ export const login = (email, password) => {
 };
 
 export const logout = () => {
-  console.log("Joł");
   clearLogoutTimer();
-  console.log("Joł2");
   AsyncStorage.removeItem("userData");
-  console.log("Joł3");
   return { type: LOGOUT };
 };
 

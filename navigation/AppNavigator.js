@@ -76,11 +76,36 @@ const GamePointsNavigator = createStackNavigator(
     GamePoints: {
       screen: GamePointsScreen,
     },
-    AdminPointDetails: {
-      screen: AdminPointDetailsScreen,
-    },
     PointEdit: {
       screen: PointDetailsEditScreen,
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const RankingNavigator = createStackNavigator(
+  {
+    Ranking: {
+      screen: PlayersRankingScreen,
+    },
+    PlayerOverview: {
+      screen: PlayersRankingScreen,
+    },
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  }
+);
+
+const GameDetailsNavigator = createStackNavigator(
+  {
+    GameDetails: {
+      screen: GameDetailsScreen,
+    },
+    GameEdit: {
+      screen: CreateGameScreen,
     },
   },
   {
@@ -92,6 +117,7 @@ const GameAdminTabConfig = {
   Points: {
     screen: GamePointsNavigator,
     navigationOptions: {
+      title: 'Punkty',
       tabBarIcon: (tabInfo) => {
         return (
           <Ionicons name="ios-compass" size={25} color={tabInfo.tintColor} />
@@ -101,8 +127,9 @@ const GameAdminTabConfig = {
     },
   },
   Ranking: {
-    screen: PlayersRankingScreen,
+    screen: RankingNavigator,
     navigationOptions: {
+      title: 'Ranking',
       tabBarIcon: (tabInfo) => {
         return (
           <Ionicons name="ios-filing" size={25} color={tabInfo.tintColor} />
@@ -112,8 +139,9 @@ const GameAdminTabConfig = {
     },
   },
   GameDetails: {
-    screen: GameDetailsScreen,
+    screen: GameDetailsNavigator,
     navigationOptions: {
+      title: 'Ustawienia gry',
       tabBarIcon: (tabInfo) => {
         return (
           <Ionicons name="ios-settings" size={25} color={tabInfo.tintColor} />
@@ -137,9 +165,6 @@ const AdminGamesNavigator = createStackNavigator(
     },
     CreateGame: {
       screen: CreateGameScreen,
-    },
-    Game: {
-      screen: GameAdminTabNavigator,
     },
   },
   {
@@ -205,6 +230,9 @@ const AuthNavigator = createStackNavigator(
 const MainNavigator = createSwitchNavigator({
   Startup: StartupScreen,
   MainApp: MainDrawerNavigator,
+  GameAdmin: {
+    screen: GameAdminTabNavigator,
+  },
   Auth: AuthNavigator,
 });
 

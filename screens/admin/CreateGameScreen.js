@@ -191,12 +191,12 @@ CreateGameScreen.navigationOptions = (navData) => {
   const submitFn = navData.navigation.getParam("submit");
   return {
     headerTitle: navData.navigation.getParam("gameId")
-      ? "Edit Game"
-      : "Add Game",
+      ? "Edytuj grę"
+      : "Dodaj grę",
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title="Save"
+          title="Zapisz"
           iconName={
             Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
           }

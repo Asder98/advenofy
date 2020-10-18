@@ -82,6 +82,7 @@ const LoginScreen = ({ navigation }) => {
     setisLoading(true);
     try {
       await dispatch(action);
+      setisLoading(false);
       navigation.navigate("MainApp");
     } catch (err) {
       setError(err.message);

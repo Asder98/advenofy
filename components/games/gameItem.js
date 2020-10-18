@@ -35,7 +35,10 @@ const gameItem = ({ onSelect, name }) => {
 const styles = StyleSheet.create({
   game: {
     height: 70,
-    margin: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#EBEBEB'
+    // marginVertical: 10,
+    // marginHorizontal: 20,
   },
   touchable: {
     flex: 1,

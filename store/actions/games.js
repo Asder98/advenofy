@@ -5,6 +5,7 @@ export const CREATE_GAME = "CREATE_GAME";
 export const UPDATE_GAME = "UPDATE_GAME";
 export const SET_OWNED_GAMES = "SET_OWNED_GAMES";
 export const SET_PLAYER_GAMES = "SET_PLAYER_GAMES";
+export const SET_ACTIVE_GAME = "SET_ACTIVE_GAME";
 
 export const fetchOwnedGames = () => {
   return async (dispatch, getState) => {
@@ -12,7 +13,7 @@ export const fetchOwnedGames = () => {
     const token = getState().auth.token;
     try {
       const response = await fetch(
-        `https://advenofy.firebaseio.com/gamesDetails.json?orderby="ownerId"?equalTo="${userId}"`
+        `https://advenofy.firebaseio.com/gamesDetails.json?orderBy="/ownerId"&equalTo="${userId}"`
       );
 
       if (!response.ok) {
@@ -20,7 +21,6 @@ export const fetchOwnedGames = () => {
       }
 
       const resData = await response.json();
-
 
       const loadedGames = [];
 
@@ -64,6 +64,10 @@ export const deleteGame = (gameId) => {
   };
 };
 
+export const setActiveGame = (gameId) => {
+    return async (dispatch) => {dispatch({ type: SET_ACTIVE_GAME, gameId: gameId })}
+};
+
 export const createGame = (name, description, gameoverMessage) => {
   return async (dispatch, getState) => {
     const userId = getState().auth.userId;
@@ -87,8 +91,6 @@ export const createGame = (name, description, gameoverMessage) => {
     );
 
     const resData = await response.json();
-
-    console.log(resData);
 
     dispatch({
       type: CREATE_GAME,

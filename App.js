@@ -8,10 +8,12 @@ import ReduxThunk from "redux-thunk";
 import AppNavigator from "./navigation/AppNavigator";
 import authReducer from "./store/reducers/auth";
 import gamesReducer from "./store/reducers/games";
+import pointsReducer from "./store/reducers/points";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   games: gamesReducer,
+  points: pointsReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

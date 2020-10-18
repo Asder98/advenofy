@@ -4,32 +4,35 @@ import {
   UPDATE_GAME,
   SET_OWNED_GAMES,
   SET_PLAYER_GAMES,
+  SET_ACTIVE_GAME,
 } from "../actions/games";
 import Game from "../../models/game";
 
 const initialState = {
   ownedGames: [],
   userGames: [],
+  activeGame: null,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_OWNED_GAMES:
       return {
+        ...state,
         ownedGames: action.ownedGames,
       };
     case CREATE_GAME:
       const newGame = new Game(
-        action.pid,
-        action.ownerId,
-        action.name,
-        action.description,
-        action.gameoverMessage,
-        action.isOpen
+        action.gameData.pid,
+        action.gameData.ownerId,
+        action.gameData.name,
+        action.gameData.description,
+        action.gameData.gameoverMessage,
+        action.gameData.isOpen
       );
       return {
         ...state,
-        ownedGames: state.ownedGames.concat(newGame)
+        ownedGames: state.ownedGames.concat(newGame),
       };
     case UPDATE_GAME:
       const gameIndex = state.ownedGames.findIndex(
@@ -61,9 +64,13 @@ export default (state = initialState, action) => {
         ownedGames: state.ownedGames.filter(
           (game) => game.id !== action.gameId
         ),
-        userGames: state.userGames.filter(
-          (game) => game.id !== action.gameId
-        ),
+        userGames: state.userGames.filter((game) => game.id !== action.gameId),
+      };
+    case SET_ACTIVE_GAME:
+      const gameId = action.gameId;
+      return {
+        ...state,
+        activeGame: gameId,
       };
   }
   return state;
