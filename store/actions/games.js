@@ -46,6 +46,107 @@ export const fetchOwnedGames = () => {
   };
 };
 
+export const fetchPlayerGames = () => {
+  return async (dispatch, getState) => {
+    const userId = getState().auth.userId;
+    const token = getState().auth.token;
+    try {
+      const response = await fetch(
+        `https://advenofy.firebaseio.com/playerGames/${userId}.json`
+      );
+
+      if (!response.ok) {
+        throw new Error("Something is wrong!");
+      }
+
+      const resData = await response.json();
+
+      // console.log(resData);
+      
+      const loadedGames = [];
+
+      for (const key in resData) {
+        loadedGames.push(
+          new Game(
+            key,
+            resData[key].ownerId,
+            resData[key].name,
+            resData[key].description,
+            resData[key].gameoverMessage,
+            resData[key].isOpen
+          )
+        );
+      }
+      dispatch({
+        type: SET_PLAYER_GAMES,
+        playerGames: loadedGames,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
+export const joinGame = (gameId) => {
+  return async (dispatch, getState) => {
+    const userId = getState().auth.userId;
+    const token = getState().auth.token;
+    const playerGames = getState().games.playerGames;
+    try {
+      const response = await fetch(
+        `https://advenofy.firebaseio.com/gamesDetails/${gameId}.json`
+      );
+
+      if (!response.ok) {
+        throw new Error("Coś nie tak! Sprawdź czy wpisałeś właściwy identyfikator!");
+      }
+
+      const resData = await response.json();
+
+      console.log(userId);
+
+      const response2 = await fetch(
+        `https://advenofy.firebaseio.com/playerGames/${userId}/${gameId}.json`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: resData.name,
+            description: resData.description,
+            gameoverMessage: resData.gameoverMessage,
+            isOpen: resData.isOpen,
+            ownerId: userId,
+          }),
+        }
+      );
+
+      const resData2 = await response2.json();
+
+      console.log(resData2);
+
+      const updatedPlayerGames = playerGames.concat(
+        new Game(
+          gameId,
+          resData.ownerId,
+          resData.name,
+          resData.description,
+          resData.gameoverMessage,
+          resData.isOpen
+        )
+      )
+
+      dispatch({
+        type: SET_PLAYER_GAMES,
+        playerGames: updatedPlayerGames,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
 export const deleteGame = (gameId) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
@@ -133,7 +234,7 @@ export const updateGame = (id, name, description, gameoverMessage, isOpen) => {
       type: UPDATE_GAME,
       gid: id,
       gameData: {
-        title,
+        name,
         description,
         gameoverMessage,
         isOpen

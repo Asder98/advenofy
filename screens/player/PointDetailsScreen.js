@@ -1,12 +1,173 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  KeyboardAvoidingView,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 
-const PointDetailsScreen = () => {
+import Card from "../../components/UI/Card2";
+import Input from "../../components/UI/Input";
+import Colors from "../../constants/Colors";
+import * as pointsActions from "../../store/actions/points";
+
+const PointDetailsScreen = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const [inputIsValid, setInputIsValid] = useState(false);
+  const [isAcquired, setIsAcquired] = useState(false);
+  const dispatch = useDispatch();
+  const pointId = navigation.getParam("pointId");
+  const point = useSelector((state) =>
+    state.points.points.find((point) => point.id === pointId)
+  );
+  const acquiredPoints = useSelector((state) => state.points.acquiredPoints);
+
+  useEffect(() => {
+    const acquiredId = acquiredPoints.find((Id) => Id === pointId);
+    if (acquiredId) {
+      setIsAcquired(true);
+    }
+  }, [pointId, acquiredPoints]);
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("Error! ", error, [{ text: "ok" }]);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    navigation.setParams({ gameName: point.name });
+  }, [point]);
+
+  const submitHandler = useCallback(async () => {
+    if (!inputIsValid) {
+      Alert.alert("Wrong input!", "Please check the errors in the form.", [
+        { text: "Okay" },
+      ]);
+      return;
+    }
+
+    setError(false);
+    setIsLoading(true);
+
+    try {
+      await dispatch(pointsActions.acquirePoint(pointId, inputValue));
+      navigation.goBack();
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false);
+  }, [dispatch, inputValue, inputIsValid, pointId]);
+
+  const inputChangeHandler = useCallback(
+    (id, inputValue, inputValidity) => {
+      setInputValue(inputValue);
+      setInputIsValid(inputValidity);
+    },
+    [dispatch, setInputValue, setInputIsValid]
+  );
+
+  let bottomCard = (
+    <View style={styles.bottomContainer}>
+      <Text style={styles.idTitle}>Zalicz punkt</Text>
+      <Input
+        id="code"
+        label="Hasło"
+        errorText="Proszę wprowadzić prawidłowe hasło"
+        onInputChange={inputChangeHandler}
+        initialValue={""}
+        initialValid={false}
+        required
+      />
+      <View style={styles.button}>
+        <Button
+          title="Zatwierdź"
+          color={Colors.primary}
+          onPress={submitHandler}
+        />
+      </View>
+    </View>
+  );
+
+  if (isAcquired) {
+    bottomCard = (
+      <View style={styles.bottomContainer}>
+        <Text style={styles.idTitle}>Punkt zaliczony!</Text>
+      </View>
+    );
+  }
+
+  if (isLoading) {
     return (
-        <View>
-            <Text>PointDetailsScreen</Text>
-        </View>
-    )
-}
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
 
-export default PointDetailsScreen
+  return (
+    <KeyboardAvoidingView style={{ flex: 1 }}>
+      <View style={styles.screen}>
+        <ScrollView style={styles.textContainer}>
+          <Text style={styles.label}>Nazwa punktu</Text>
+          <Text style={styles.title}>{point.name}</Text>
+          <Text style={styles.label}>Opis</Text>
+          <Text style={styles.description}>{point.description}</Text>
+          <Text style={styles.label}>Lokalizacja</Text>
+          <Text style={styles.description}>{point.location}</Text>
+        </ScrollView>
+        <View>
+          <Card>{bottomCard}</Card>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
+  );
+};
+
+PointDetailsScreen.navigationOptions = (navData) => {
+  const pointName = navData.navigation.getParam("gameName");
+  return {
+    headerTitle: pointName,
+  };
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: "space-between",
+    padding: 20,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 12,
+    color: "#aaa",
+  },
+  idTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  bottomContainer: {
+    padding: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    paddingTop: 5,
+  },
+});
+
+export default PointDetailsScreen;

@@ -10,7 +10,7 @@ import Game from "../../models/game";
 
 const initialState = {
   ownedGames: [],
-  userGames: [],
+  playerGames: [],
   activeGame: null,
 };
 
@@ -20,6 +20,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         ownedGames: action.ownedGames,
+      };
+    case SET_PLAYER_GAMES:
+      return {
+        ...state,
+        playerGames: action.playerGames,
       };
     case CREATE_GAME:
       const newGame = new Game(
@@ -41,7 +46,7 @@ export default (state = initialState, action) => {
       const updatedGame = new Game(
         action.gid,
         state.ownedGames[gameIndex].ownerId,
-        action.gameData.title,
+        action.gameData.name,
         action.gameData.description,
         action.gameData.gameoverMessage,
         action.gameData.isOpen

@@ -2,8 +2,6 @@ import React, { useEffect, useCallback, useReducer, useState } from "react";
 import {
   View,
   ScrollView,
-  Text,
-  TextInput,
   StyleSheet,
   Platform,
   Alert,
@@ -59,7 +57,7 @@ const CreateGameScreen = ({navigation}) => {
       name: editedGame ? editedGame.name : "",
       description: editedGame ? editedGame.description : "",
       gameoverMessage: editedGame ? editedGame.gameoverMessage : "",
-      isOpen: editedGame ? editedGame.gameoverMessage : false,
+      isOpen: editedGame ? editedGame.isOpen : 'false',
     },
     inputValidities: {
       name: editedGame ? true : false,
@@ -98,6 +96,7 @@ const CreateGameScreen = ({navigation}) => {
             formState.inputValues.isOpen
           )
         );
+        navigation.goBack();
       } else {
         await dispatch(
             gamesActions.createGame(
@@ -176,7 +175,7 @@ const CreateGameScreen = ({navigation}) => {
               label="Otwarta?"
               errorText="Coś poszło nie tak :/"
               onInputChange={inputChangeHandler}
-              initialValue={editedGame ? editedGame.gameoverMessage : ""}
+              initialValue={editedGame ? editedGame.isOpen : ""}
               initialValid={!!editedGame}
               required
             />

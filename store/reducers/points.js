@@ -3,11 +3,14 @@ import {
   CREATE_POINT,
   UPDATE_POINT,
   SET_POINTS,
+  ACQUIRE_POINT,
+  SET_PLAYER_POINTS,
 } from "../actions/points";
 import Point from "../../models/point";
 
 const initialState = {
-    points: []
+  points: [],
+  acquiredPoints: [],
 };
 
 export default (state = initialState, action) => {
@@ -17,13 +20,24 @@ export default (state = initialState, action) => {
         ...state,
         points: action.points,
       };
+    case SET_PLAYER_POINTS:
+      return {
+        ...state,
+        points: action.points,
+        acquiredPoints: action.acquiredPoints,
+      };
+    case ACQUIRE_POINT:
+      return {
+        ...state,
+        acquiredPoints: state.acquiredPoints.concat(action.pid)
+      };
     case CREATE_POINT:
       const newPoint = new Point(
         action.pointData.pid,
         action.pointData.name,
         action.pointData.description,
         action.pointData.code,
-        action.pointData.location,
+        action.pointData.location
       );
       return {
         ...state,
@@ -38,7 +52,7 @@ export default (state = initialState, action) => {
         action.pointData.name,
         action.pointData.description,
         action.pointData.code,
-        action.pointData.location,
+        action.pointData.location
       );
       const updatedPoints = [...state.points];
       updatedPoints[pointIndex] = updatedPoint;
@@ -49,9 +63,7 @@ export default (state = initialState, action) => {
     case DELETE_POINT:
       return {
         ...state,
-        points: state.points.filter(
-          (point) => point.id !== action.pointId
-        )
+        points: state.points.filter((point) => point.id !== action.pointId),
       };
   }
   return state;

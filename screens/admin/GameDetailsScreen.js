@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
+import HeaderButton from "../../components/UI/HeaderButton";
 import CopyCard from "../../components/UI/CopyCard";
 
-const GameDetailsScreen = () => {
+const GameDetailsScreen = ({navigation}) => {
   const gameId = useSelector((state) => state.games.activeGame);
   const game = useSelector((state) =>
     state.games.ownedGames.find((game) => game.id === gameId)
   );
+
+  useEffect(() => {
+    navigation.setParams({gameId: gameId})
+  }, [gameId])
 
   return (
     <View style={styles.screen}>
@@ -26,6 +32,24 @@ const GameDetailsScreen = () => {
       </View>
     </View>
   );
+};
+
+GameDetailsScreen.navigationOptions = (navData) => {
+  const gameId = navData.navigation.getParam("gameId");
+  return {
+    headerTitle: "Szczegóły gry",
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Dodaj"
+          iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
+          onPress={() => {
+            navData.navigation.navigate("GameEdit", {gameId: gameId});
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({

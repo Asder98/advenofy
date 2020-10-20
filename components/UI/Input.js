@@ -55,7 +55,7 @@ const Input = ({
     }
     if (email && !emailRegex.test(text.toLowerCase())) {
       isValid = false;
-    }
+    } 
     if (min != null && +text < min) {
       isValid = false;
     }

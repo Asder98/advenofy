@@ -36,7 +36,7 @@ const StartupScreen = (props) => {
     };
 
     tryLogin();
-  }, []);
+  }, [dispatch]);
 
   return (
     <View style={styles.view}>
