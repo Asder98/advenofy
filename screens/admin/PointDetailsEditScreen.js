@@ -14,6 +14,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 
 import HeaderButton from "../../components/UI/HeaderButton";
+import LocationPicker from "../../components/UI/LocationPicker";
 import * as pointsActions from "../../store/actions/points";
 import Input from "../../components/UI/Input";
 import Colors from "../../constants/Colors";
@@ -45,6 +46,7 @@ const formReducer = (state, action) => {
 };
 
 const PointDetailsEditScreen = ({ navigation }) => {
+  const [selectedLocation, setSelectedLocation] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
@@ -52,6 +54,7 @@ const PointDetailsEditScreen = ({ navigation }) => {
   const editedPoint = useSelector((state) =>
     state.points.points.find((point) => point.id === pointId)
   );
+
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -59,16 +62,24 @@ const PointDetailsEditScreen = ({ navigation }) => {
       name: editedPoint ? editedPoint.name : "",
       description: editedPoint ? editedPoint.description : "",
       code: editedPoint ? editedPoint.code.toString() : "",
-      location: editedPoint ? editedPoint.location : false,
     },
     inputValidities: {
       name: editedPoint ? true : false,
       description: editedPoint ? true : false,
       code: editedPoint ? true : false,
-      location: editedPoint ? true : true,
     },
     formisValid: editedPoint ? true : false,
   });
+
+  useEffect(() => {
+    if (editedPoint) {
+      const location = {
+        lat: editedPoint.lat,
+        lng: editedPoint.lng,
+      };
+      setSelectedLocation(location);
+    }
+  }, [editedPoint]);
 
   useEffect(() => {
     if (error) {
@@ -76,11 +87,13 @@ const PointDetailsEditScreen = ({ navigation }) => {
     }
   }, [error]);
 
+  const locationPickedHandler = useCallback((location) => {
+    setSelectedLocation(location);
+  }, []);
+
   const submitHandler = useCallback(async () => {
-    if (!formState.formisValid) {
-      Alert.alert("Wrong input!", "Please check the errors in the form.", [
-        { text: "Okay" },
-      ]);
+    if (!formState.formisValid || !selectedLocation) {
+      Alert.alert("Błąd!", "Sprawdź wprowadzone dane.", [{ text: "Ok" }]);
       return;
     }
 
@@ -90,22 +103,22 @@ const PointDetailsEditScreen = ({ navigation }) => {
     try {
       if (editedPoint) {
         await dispatch(
-            pointsActions.updatePoint(
+          pointsActions.updatePoint(
             pointId,
             formState.inputValues.name,
             formState.inputValues.description,
             formState.inputValues.code,
-            formState.inputValues.location
+            selectedLocation
           )
         );
         navigation.goBack();
       } else {
         await dispatch(
-            pointsActions.createPoint(
+          pointsActions.createPoint(
             formState.inputValues.name,
             formState.inputValues.description,
             formState.inputValues.code,
-            formState.inputValues.location
+            selectedLocation
           )
         );
         navigation.goBack();
@@ -114,7 +127,7 @@ const PointDetailsEditScreen = ({ navigation }) => {
       setError(err.message);
     }
     setIsLoading(false);
-  }, [dispatch, pointId, formState]);
+  }, [dispatch, pointId, formState, selectedLocation]);
 
   useEffect(() => {
     navigation.setParams({ submit: submitHandler });
@@ -172,14 +185,14 @@ const PointDetailsEditScreen = ({ navigation }) => {
             initialValid={!!editedPoint}
             required
           />
-          <Input
-            id="location"
-            label="Podaj lokację"
-            errorText="Coś poszło nie tak :/"
-            onInputChange={inputChangeHandler}
-            initialValue={editedPoint ? editedPoint.location : ""}
-            initialValid={!!editedPoint}
-          />
+          <View>
+          <Text style={styles.label}>Lokalizacja</Text>
+            <LocationPicker
+              navigation={navigation}
+              onLocationPicked={locationPickedHandler}
+              initialLocation={editedPoint ? selectedLocation : null}
+            />
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -214,6 +227,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  label: {
+    //fontFamily: "open-sans-bold",
+    marginVertical: 8,
   },
 });
 export default PointDetailsEditScreen;

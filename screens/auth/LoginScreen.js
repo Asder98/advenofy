@@ -108,7 +108,7 @@ const LoginScreen = ({ navigation }) => {
       //keyboardVerticalOffset={50}
       style={styles.screen}
     >
-      <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
+      <LinearGradient colors={["#F5CC75", "#FFDD94"]} style={styles.gradient}>
         <Card style={styles.authContainer}>
           <ScrollView>
             <Input

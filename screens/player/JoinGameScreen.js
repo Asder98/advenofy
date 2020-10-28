@@ -21,6 +21,8 @@ const JoinGameScreen = ({ navigation }) => {
   const [error, setError] = useState();
   const [inputValue, setInputValue] = useState("");
   const [inputIsValid, setInputIsValid] = useState(false);
+  const [teamNameValue, setTeamNameValue] = useState("");
+  const [teamNameIsValid, setTeamNameIsValid] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -31,7 +33,7 @@ const JoinGameScreen = ({ navigation }) => {
   }, [error]);
 
   const submitHandler = useCallback(async () => {
-    if (!inputIsValid) {
+    if (!inputIsValid && !teamNameIsValid) {
       Alert.alert("Wrong input!", "Please check the errors in the form.", [
         { text: "Okay" },
       ]);
@@ -42,13 +44,13 @@ const JoinGameScreen = ({ navigation }) => {
     setIsLoading(true);
 
     try {
-      await dispatch(gamesActions.joinGame(inputValue));
+      await dispatch(gamesActions.joinGame(inputValue, teamNameValue));
       navigation.goBack();
     } catch (err) {
       setError(err.message);
     }
     setIsLoading(false);
-  }, [dispatch, inputValue, inputIsValid]);
+  }, [dispatch, inputValue, inputIsValid, teamNameValue, teamNameIsValid]);
 
   useEffect(() => {
     navigation.setParams({ submit: submitHandler });
@@ -56,10 +58,21 @@ const JoinGameScreen = ({ navigation }) => {
 
   const inputChangeHandler = useCallback(
     (id, inputValue, inputValidity) => {
-      setInputValue(inputValue);
-      setInputIsValid(inputValidity);
+      if (id === "gameid") {
+        setInputValue(inputValue);
+        setInputIsValid(inputValidity);
+      } else if (id === "teamName") {
+        setTeamNameValue(inputValue);
+        setTeamNameIsValid(inputValidity);
+      }
     },
-    [dispatch, setInputValue, setInputIsValid]
+    [
+      dispatch,
+      setInputValue,
+      setInputIsValid,
+      setTeamNameValue,
+      setTeamNameIsValid,
+    ]
   );
 
   if (isLoading) {
@@ -75,9 +88,18 @@ const JoinGameScreen = ({ navigation }) => {
       <ScrollView>
         <View style={styles.form}>
           <Input
-            id="id"
+            id="gameid"
             label="Identyfikator gry"
             errorText="Proszę wprowadzić Identyfikator"
+            onInputChange={inputChangeHandler}
+            initialValue={""}
+            initialValid={false}
+            required
+          />
+          <Input
+            id="teamName"
+            label="Nazwa drużyny/zawodnika"
+            errorText="Proszę wprowadzić właściwą nazwę"
             onInputChange={inputChangeHandler}
             initialValue={""}
             initialValid={false}

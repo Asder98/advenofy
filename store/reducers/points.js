@@ -37,7 +37,8 @@ export default (state = initialState, action) => {
         action.pointData.name,
         action.pointData.description,
         action.pointData.code,
-        action.pointData.location
+        action.pointData.lat,
+        action.pointData.lng
       );
       return {
         ...state,
@@ -52,7 +53,8 @@ export default (state = initialState, action) => {
         action.pointData.name,
         action.pointData.description,
         action.pointData.code,
-        action.pointData.location
+        action.pointData.lat,
+        action.pointData.lng
       );
       const updatedPoints = [...state.points];
       updatedPoints[pointIndex] = updatedPoint;

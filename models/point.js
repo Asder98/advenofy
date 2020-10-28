@@ -1,10 +1,11 @@
 class Point {
-    constructor(id, name, description, code, location) {
+    constructor(id, name, description, code, lat, lng) {
       this.id = id;
       this.name = name;
       this.description = description;
       this.code = code;
-      this.location = location;
+      this.lat = lat;
+      this.lng = lng;
     }
   }
   

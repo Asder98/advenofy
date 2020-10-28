@@ -5,12 +5,14 @@ import {
   SET_OWNED_GAMES,
   SET_PLAYER_GAMES,
   SET_ACTIVE_GAME,
+  SET_PLAYERS
 } from "../actions/games";
 import Game from "../../models/game";
 
 const initialState = {
   ownedGames: [],
   playerGames: [],
+  players: [],
   activeGame: null,
 };
 
@@ -77,6 +79,11 @@ export default (state = initialState, action) => {
         ...state,
         activeGame: gameId,
       };
+      case SET_PLAYERS: 
+      return {
+        ...state,
+        players: action.players
+      }
   }
   return state;
 };

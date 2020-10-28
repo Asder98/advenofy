@@ -33,7 +33,8 @@ export const fetchPoints = () => {
               resData[key].name,
               resData[key].description,
               resData[key].code,
-              resData[key].location
+              resData[key].location ? resData[key].location.lat : null,
+              resData[key].location ? resData[key].location.lng : null
             )
           );
         }
@@ -75,7 +76,8 @@ export const fetchPlayerPoints = () => {
               resData[key].name,
               resData[key].description,
               resData[key].code,
-              resData[key].location
+              resData[key].location ? resData[key].location.lat : null,
+              resData[key].location ? resData[key].location.lng : null
             )
           );
         }
@@ -190,7 +192,10 @@ export const createPoint = (name, description, code, location) => {
           name: name,
           description: description,
           code: code,
-          location: location,
+          location: {
+            lat: location.lat,
+            lng: location.lng
+          },
         }),
       }
     );
@@ -204,7 +209,8 @@ export const createPoint = (name, description, code, location) => {
         name,
         description,
         code,
-        location,
+        lat: location.lat,
+        lng: location.lng
       },
     });
   };
@@ -225,7 +231,10 @@ export const updatePoint = (id, name, description, code, location) => {
           name: name,
           description: description,
           code: code,
-          location: location,
+          location: {
+            lat: location.lat,
+            lng: location.lng
+          },
         }),
       }
     );
@@ -241,7 +250,8 @@ export const updatePoint = (id, name, description, code, location) => {
         name,
         description,
         code,
-        location,
+        lat: location.lat,
+        lng: location.lng
       },
     });
   };

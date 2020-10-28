@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Card from "../../components/UI/Card2";
 import Input from "../../components/UI/Input";
+import MapPreview from "../../components/UI/MapPreview";
 import Colors from "../../constants/Colors";
 import * as pointsActions from "../../store/actions/points";
 
@@ -28,6 +29,7 @@ const PointDetailsScreen = ({ navigation }) => {
     state.points.points.find((point) => point.id === pointId)
   );
   const acquiredPoints = useSelector((state) => state.points.acquiredPoints);
+  const selectedLocation = { lat: point.lat, lng: point.lng };
 
   useEffect(() => {
     const acquiredId = acquiredPoints.find((Id) => Id === pointId);
@@ -45,6 +47,13 @@ const PointDetailsScreen = ({ navigation }) => {
   useEffect(() => {
     navigation.setParams({ gameName: point.name });
   }, [point]);
+
+  const showMapHandler = () => {
+    navigation.navigate("Map", {
+      readonly: true,
+      initialLocation: selectedLocation,
+    });
+  };
 
   const submitHandler = useCallback(async () => {
     if (!inputIsValid) {
@@ -121,8 +130,15 @@ const PointDetailsScreen = ({ navigation }) => {
           <Text style={styles.label}>Opis</Text>
           <Text style={styles.description}>{point.description}</Text>
           <Text style={styles.label}>Lokalizacja</Text>
-          <Text style={styles.description}>{point.location}</Text>
+          <View style={styles.locationContainer}>
+            <MapPreview
+              style={styles.mapPreview}
+              location={selectedLocation}
+              onPress={showMapHandler}
+            />
+          </View>
         </ScrollView>
+
         <View>
           <Card>{bottomCard}</Card>
         </View>
@@ -156,6 +172,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#aaa",
   },
+  description: {
+    marginBottom: 15,
+  },
   idTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -167,6 +186,27 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingTop: 5,
+  },
+  mapPreview: {
+    width: "100%",
+    maxWidth: 350,
+    height: 200,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  locationContainer: {
+    marginVertical: 5,
+    width: "100%",
+    maxWidth: 350,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 5,
+    backgroundColor: "white",
+    borderRadius: 10,
   },
 });
 

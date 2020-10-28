@@ -1,4 +1,5 @@
 import Game from "../../models/game";
+import Player from "../../models/player";
 
 export const DELETE_GAME = "DELETE_GAME";
 export const CREATE_GAME = "CREATE_GAME";
@@ -6,6 +7,7 @@ export const UPDATE_GAME = "UPDATE_GAME";
 export const SET_OWNED_GAMES = "SET_OWNED_GAMES";
 export const SET_PLAYER_GAMES = "SET_PLAYER_GAMES";
 export const SET_ACTIVE_GAME = "SET_ACTIVE_GAME";
+export const SET_PLAYERS = 'SET_PLAYERS'
 
 export const fetchOwnedGames = () => {
   return async (dispatch, getState) => {
@@ -87,7 +89,7 @@ export const fetchPlayerGames = () => {
   };
 };
 
-export const joinGame = (gameId) => {
+export const joinGame = (gameId, teamName) => {
   return async (dispatch, getState) => {
     const userId = getState().auth.userId;
     const token = getState().auth.token;
@@ -122,9 +124,31 @@ export const joinGame = (gameId) => {
         }
       );
 
+      if (!response2.ok) {
+        throw new Error("Operacja się nie powiodła!");
+      }
+
       const resData2 = await response2.json();
 
       console.log(resData2);
+
+      const response3 = await fetch(
+        `https://advenofy.firebaseio.com/participants/${gameId}/${userId}.json`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            teamName: teamName,
+            acquiredPoints: false,
+          }),
+        }
+      );
+  
+      const resData3 = await response3.json();
+
+      console.log(resData3);
 
       const updatedPlayerGames = playerGames.concat(
         new Game(
@@ -240,5 +264,41 @@ export const updateGame = (id, name, description, gameoverMessage, isOpen) => {
         isOpen
       },
     });
+  };
+};
+
+export const fetchGamePlayers = (gameId) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    try {
+      const response = await fetch(
+        `https://advenofy.firebaseio.com/participants/${gameId}.json`
+      );
+
+      if (!response.ok) {
+        throw new Error("Something is wrong!");
+      }
+
+      const resData = await response.json();
+      
+      const players = [];
+
+      for (const key in resData) {
+        players.push(
+          new Player(
+            key,
+            resData[key].teamName,
+            resData[key].acquiredPoints,
+          )
+        );
+      }
+
+      dispatch({
+        type: SET_PLAYERS,
+        players: players,
+      });
+    } catch (err) {
+      throw err;
+    }
   };
 };

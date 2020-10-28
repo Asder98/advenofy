@@ -21,6 +21,7 @@ import PointDetailsEditScreen from "../screens/admin/PointDetailsEditScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
 import RegisterScreen from "../screens/auth/RegisterScreen";
 import StartupScreen from "../screens/StartupScreen";
+import MapScreen from '../screens/MapScreen'
 import * as authActions from "../store/actions/auth";
 
 import Colors from "../constants/Colors";
@@ -52,6 +53,9 @@ const PlayerGamesNavigator = createStackNavigator(
     PointDetails: {
       screen: PointDetailsScreen,
     },
+    Map: {
+      screen: MapScreen,
+    },
     GameOver: {
       screen: GameScreen,
     },
@@ -78,6 +82,9 @@ const GamePointsNavigator = createStackNavigator(
     },
     PointEdit: {
       screen: PointDetailsEditScreen,
+    },
+    Map: {
+      screen: MapScreen,
     },
   },
   {

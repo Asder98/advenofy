@@ -102,18 +102,7 @@ const Gamescreen = ({ navigation }) => {
 
 Gamescreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "Punkty",
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Dodaj"
-          iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
-          onPress={() => {
-            navData.navigation.navigate("PointEdit");
-          }}
-        />
-      </HeaderButtons>
-    ),
+    headerTitle: "Punkty"
   };
 };
 
