@@ -18,6 +18,8 @@ const gameItem = ({ onSelect, name }) => {
     TouchableCmp = TouchableNativeFeedback;
   }
 
+  console.log("Test", name);
+
   return (
     <Card style={styles.game}>
       <View style={styles.touchable}>
@@ -34,9 +36,10 @@ const gameItem = ({ onSelect, name }) => {
 
 const styles = StyleSheet.create({
   game: {
+    width: "100%",
     height: 70,
     borderTopWidth: 1,
-    borderTopColor: '#EBEBEB'
+    borderTopColor: "#EBEBEB",
     // marginVertical: 10,
     // marginHorizontal: 20,
   },
@@ -46,14 +49,13 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   details: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
   },
   name: {
-    //fontFamily: "open-sans-bold",
+    fontFamily: "open-sans-bold",
     fontSize: 18,
   },
 });

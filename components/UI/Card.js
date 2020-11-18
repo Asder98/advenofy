@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     // shadowRadius: 8,
     // elevation: 5,
     // borderRadius: 10,
+    color: 'black',
     backgroundColor: 'white'
   }
 });

@@ -147,7 +147,7 @@ const LoginScreen = ({ navigation }) => {
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={`Switch to ${isSignup ? "Login" : "Sign up"}`}
+                title={`Przełącz na ${isSignup ? "logowanie" : "rejstrownia"}`}
                 color={Colors.accent}
                 onPress={() => {
                   setIsSignup((prevState) => !prevState);
