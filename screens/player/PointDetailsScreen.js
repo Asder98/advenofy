@@ -85,7 +85,7 @@ const PointDetailsScreen = ({ navigation }) => {
 
   let bottomCard = (
     <View style={styles.bottomContainer}>
-      <Text style={styles.idTitle}>Zalicz punkt</Text>
+      <Text style={styles.idTitle}>Podaj hasło:</Text>
       <Input
         id="code"
         label="Hasło"
@@ -123,20 +123,19 @@ const PointDetailsScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
+      <View style={styles.locationContainer}>
+        <MapPreview
+          style={styles.mapPreview}
+          location={selectedLocation}
+          onPress={showMapHandler}
+        />
+      </View>
       <View style={styles.screen}>
         <ScrollView style={styles.textContainer}>
-          <Text style={styles.label}>Nazwa punktu</Text>
+          {/* <Text style={styles.label}>Nazwa punktu</Text> */}
           <Text style={styles.title}>{point.name}</Text>
-          <Text style={styles.label}>Opis</Text>
+          {/* <Text style={styles.label}>Opis</Text> */}
           <Text style={styles.description}>{point.description}</Text>
-          <Text style={styles.label}>Lokalizacja</Text>
-          <View style={styles.locationContainer}>
-            <MapPreview
-              style={styles.mapPreview}
-              location={selectedLocation}
-              onPress={showMapHandler}
-            />
-          </View>
         </ScrollView>
 
         <View>
@@ -189,24 +188,24 @@ const styles = StyleSheet.create({
   },
   mapPreview: {
     width: "100%",
-    maxWidth: 350,
+    //maxWidth: 350,
     height: 200,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    //borderBottomLeftRadius: 10,
+    //borderBottomRightRadius: 10,
   },
   locationContainer: {
-    marginVertical: 5,
+    //marginVertical: 5,
     width: "100%",
-    maxWidth: 350,
+    //maxWidth: 350,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "black",
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5,
+    // shadowColor: "black",
+    // shadowOpacity: 0.26,
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowRadius: 8,
+    // elevation: 5,
     backgroundColor: "white",
-    borderRadius: 10,
+    //borderRadius: 10,
   },
 });
 

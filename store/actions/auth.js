@@ -7,6 +7,8 @@ export const LOGOUT = "LOGOUT";
 
 let timer;
 
+import ENV from '../../env';
+
 export const auth = (userId, token, expTime) => {
   return (dispatch) => {
     dispatch(setLogoutTimer(expTime));
@@ -17,7 +19,7 @@ export const auth = (userId, token, expTime) => {
 export const signup = (email, password) => {
   return async (dispatch) => {
     const response = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAaKfGsCAc4oNxNLYvoRPXgfmeIa9_SKaY",
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${ENV.googleAuthApiKey}`,
       {
         method: "POST",
         headers: {

@@ -118,7 +118,7 @@ const LoginScreen = ({ navigation }) => {
               required
               email
               autoCapitalize="none"
-              errorText="Please enter a valid email address."
+              errorText="Proszę wprowadzić właściwy adres email."
               onInputChange={inputChangeHandler}
               initialValue="test@test.pl"
             />
@@ -130,7 +130,7 @@ const LoginScreen = ({ navigation }) => {
               required
               minLength={5}
               autoCapitalize="none"
-              errorText="Please enter a valid password."
+              errorText="Proszę wprowadzić właściwe hasło."
               onInputChange={inputChangeHandler}
               initialValue="testtest"
             />

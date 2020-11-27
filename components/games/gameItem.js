@@ -18,8 +18,6 @@ const gameItem = ({ onSelect, name }) => {
     TouchableCmp = TouchableNativeFeedback;
   }
 
-  console.log("Test", name);
-
   return (
     <Card style={styles.game}>
       <View style={styles.touchable}>
@@ -36,7 +34,6 @@ const gameItem = ({ onSelect, name }) => {
 
 const styles = StyleSheet.create({
   game: {
-    width: "100%",
     height: 70,
     borderTopWidth: 1,
     borderTopColor: "#EBEBEB",

@@ -45,14 +45,13 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   details: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
   },
   name: {
-    //fontFamily: "open-sans-bold",
+    fontFamily: "open-sans-bold",
     fontSize: 18,
   },
 });
