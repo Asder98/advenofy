@@ -31,10 +31,10 @@ const defaultNavOptions = {
     backgroundColor: Platform.OS === "android" ? Colors.primary : "",
   },
   headerTitleStyle: {
-    //fontFamily: "open-sans-bold",
+    fontFamily: "open-sans-bold",
   },
   headerBackTitleStyle: {
-    //fontFamily: "open-sans",
+    fontFamily: "open-sans",
   },
   headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
@@ -206,7 +206,7 @@ const MainDrawerNavigator = createDrawerNavigator(
           <SafeAreaView forceInsert={{ top: "always", horizontal: "never" }}>
             <DrawerItems {...props} />
             <Button
-              title="Logout"
+              title="Wyloguj"
               color={Colors.primary}
               onPress={() => {
                 dispatch(authActions.logout());

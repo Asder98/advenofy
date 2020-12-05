@@ -120,7 +120,6 @@ const LoginScreen = ({ navigation }) => {
               autoCapitalize="none"
               errorText="Proszę wprowadzić właściwy adres email."
               onInputChange={inputChangeHandler}
-              initialValue="test@test.pl"
             />
             <Input
               id="password"
@@ -132,7 +131,6 @@ const LoginScreen = ({ navigation }) => {
               autoCapitalize="none"
               errorText="Proszę wprowadzić właściwe hasło."
               onInputChange={inputChangeHandler}
-              initialValue="testtest"
             />
             <View style={styles.buttonContainer}>
               {isLoading ? (

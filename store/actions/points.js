@@ -14,7 +14,7 @@ export const fetchPoints = () => {
     const activeGame = getState().games.activeGame;
     try {
       const response = await fetch(
-        `https://advenofy.firebaseio.com/gamePoints/${activeGame}.json`
+        `https://advenofy.firebaseio.com/gamePoints/${activeGame}.json?auth=${token}`
       );
 
       if (!response.ok) {
@@ -57,7 +57,7 @@ export const fetchPlayerPoints = () => {
     const activeGame = getState().games.activeGame;
     try {
       const response = await fetch(
-        `https://advenofy.firebaseio.com/gamePoints/${activeGame}.json`
+        `https://advenofy.firebaseio.com/gamePoints/${activeGame}.json?auth=${token}`
       );
 
       if (!response.ok) {
@@ -84,7 +84,7 @@ export const fetchPlayerPoints = () => {
       }
 
       const response2 = await fetch(
-        `https://advenofy.firebaseio.com/participants/${activeGame}/${userId}/acquiredPoints.json`
+        `https://advenofy.firebaseio.com/participants/${activeGame}/${userId}/acquiredPoints.json?auth=${token}`
       );
 
       if (!response2.ok) {
@@ -121,7 +121,7 @@ export const acquirePoint = (id, code) => {
     const token = getState().auth.token;
     const acquiredPoints = getState().points.acquiredPoints;
     const response = await fetch(
-      `https://advenofy.firebaseio.com/gamePoints/${gameId}/${id}/code.json`
+      `https://advenofy.firebaseio.com/gamePoints/${gameId}/${id}/code.json?auth=${token}`
     );
 
     if (!response.ok) {
@@ -134,7 +134,7 @@ export const acquirePoint = (id, code) => {
       const newAcquiredPoints = acquiredPoints.concat(id);
 
       const response2 = await fetch(
-        `https://advenofy.firebaseio.com/participants/${gameId}/${userId}.json`,
+        `https://advenofy.firebaseio.com/participants/${gameId}/${userId}.json?auth=${token}`,
         {
           method: "PATCH",
           headers: {
@@ -163,7 +163,7 @@ export const delatePoint = (pointId) => {
     const token = getState().auth.token;
     const gameId = getState().games.activeGame;
     const response = await fetch(
-      `https://advenofy.firebaseio.com/gamePoints/${activeGame}/${pointId}.json`,
+      `https://advenofy.firebaseio.com/gamePoints/${activeGame}/${pointId}.json?auth=${token}`,
       {
         method: "DELETE",
       }
@@ -182,7 +182,7 @@ export const createPoint = (name, description, code, location) => {
     const gameId = getState().games.activeGame;
     const token = getState().auth.token;
     const response = await fetch(
-      `https://advenofy.firebaseio.com/gamePoints/${gameId}.json`,
+      `https://advenofy.firebaseio.com/gamePoints/${gameId}.json?auth=${token}`,
       {
         method: "POST",
         headers: {
@@ -221,7 +221,7 @@ export const updatePoint = (id, name, description, code, location) => {
     const gameId = getState().games.activeGame;
     const token = getState().auth.token;
     const response = await fetch(
-      `https://advenofy.firebaseio.com/gamePoints/${gameId}/${id}.json`,
+      `https://advenofy.firebaseio.com/gamePoints/${gameId}/${id}.json?auth=${token}`,
       {
         method: "PATCH",
         headers: {

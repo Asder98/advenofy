@@ -15,7 +15,7 @@ export const fetchOwnedGames = () => {
     const token = getState().auth.token;
     try {
       const response = await fetch(
-        `https://advenofy.firebaseio.com/gamesDetails.json?orderBy="/ownerId"&equalTo="${userId}"`
+        `https://advenofy.firebaseio.com/gamesDetails.json?orderBy="/ownerId"&equalTo="${userId}"?auth=${token}`
       );
 
       if (!response.ok) {
@@ -54,7 +54,7 @@ export const fetchPlayerGames = () => {
     const token = getState().auth.token;
     try {
       const response = await fetch(
-        `https://advenofy.firebaseio.com/playerGames/${userId}.json`
+        `https://advenofy.firebaseio.com/playerGames/${userId}.json?auth=${token}`
       );
 
       if (!response.ok) {
@@ -96,7 +96,7 @@ export const joinGame = (gameId, teamName) => {
     const playerGames = getState().games.playerGames;
     try {
       const response = await fetch(
-        `https://advenofy.firebaseio.com/gamesDetails/${gameId}.json`
+        `https://advenofy.firebaseio.com/gamesDetails/${gameId}.json?auth=${token}`
       );
 
       if (!response.ok) {
@@ -108,7 +108,7 @@ export const joinGame = (gameId, teamName) => {
       console.log(userId);
 
       const response2 = await fetch(
-        `https://advenofy.firebaseio.com/playerGames/${userId}/${gameId}.json`,
+        `https://advenofy.firebaseio.com/playerGames/${userId}/${gameId}.json?auth=${token}`,
         {
           method: "PUT",
           headers: {
@@ -133,7 +133,7 @@ export const joinGame = (gameId, teamName) => {
       console.log(resData2);
 
       const response3 = await fetch(
-        `https://advenofy.firebaseio.com/participants/${gameId}/${userId}.json`,
+        `https://advenofy.firebaseio.com/participants/${gameId}/${userId}.json?auth=${token}`,
         {
           method: "PUT",
           headers: {
@@ -175,7 +175,7 @@ export const deleteGame = (gameId) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
-      `https://advenofy.firebaseio.com/gamesDetails/${gameId}.json`,
+      `https://advenofy.firebaseio.com/gamesDetails/${gameId}.json?auth=${token}`,
       {
         method: "DELETE",
       }
@@ -199,7 +199,7 @@ export const createGame = (name, description, gameoverMessage) => {
     const token = getState().auth.token;
     const isOpen = false
     const response = await fetch(
-      `https://advenofy.firebaseio.com/gamesDetails.json`,
+      `https://advenofy.firebaseio.com/gamesDetails.json?auth=${token}`,
       {
         method: "POST",
         headers: {
@@ -214,6 +214,10 @@ export const createGame = (name, description, gameoverMessage) => {
         }),
       }
     );
+
+    if (!response.ok) {
+      throw new Error("Wystąpił błąd!");
+    }
 
     const resData = await response.json();
 
@@ -235,7 +239,7 @@ export const updateGame = (id, name, description, gameoverMessage, isOpen) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
-      `https://advenofy.firebaseio.com/gamesDetails/${id}.json`,
+      `https://advenofy.firebaseio.com/gamesDetails/${id}.json?auth=${token}`,
       {
         method: "PATCH",
         headers: {
@@ -272,7 +276,7 @@ export const fetchGamePlayers = (gameId) => {
     const token = getState().auth.token;
     try {
       const response = await fetch(
-        `https://advenofy.firebaseio.com/participants/${gameId}.json`
+        `https://advenofy.firebaseio.com/participants/${gameId}.json?auth=${token}`
       );
 
       if (!response.ok) {
